@@ -8,6 +8,7 @@
         public string Phone {  get; set; } = string.Empty;
         public string IdentityDocument {  get; set; } = string.Empty;
         public LoyaltyProgram? LoyaltyProgram { get; set; }
+        public List<string> Roles { get; set; } = new List<string>();
 
         
 

@@ -15,22 +15,22 @@ namespace AirlineTicketReservation.API.Services {
         public async Task<ResponseModel<Passenger>> CreatePassenger(PassengerRequestDTO passengerRequestDTO) {
             var response = new ResponseModel<Passenger>();
 
-            var passenger = await _passengerRepository.FindByEmail(passengerRequestDTO.Email);
-
-            if (passenger == null) {
-                throw new EmailAlreadyExistsException("Email already exists.");
-            }
-
-            var newPassenger = new Passenger() {
-                Id = Guid.NewGuid(),
-                Email = passengerRequestDTO.Email,
-                FullName = passengerRequestDTO.FullName,
-                IdentityDocument = passengerRequestDTO.IdentityDocument,
-                Password = passengerRequestDTO.Password,
-                Phone = passengerRequestDTO.Phone,
-            };
-
             try {
+                var passenger = await _passengerRepository.FindByEmail(passengerRequestDTO.Email);
+
+                if (passenger != null) {
+                    throw new EmailAlreadyExistsException("Email already exists.");
+                }
+
+                var newPassenger = new Passenger() {
+                    Id = Guid.NewGuid(),
+                    Email = passengerRequestDTO.Email,
+                    FullName = passengerRequestDTO.FullName,
+                    IdentityDocument = passengerRequestDTO.IdentityDocument,
+                    Password = passengerRequestDTO.Password,
+                    Phone = passengerRequestDTO.Phone,
+                };
+
                 await _passengerRepository.Create(newPassenger);
                 var passengers = await _passengerRepository.GetAll();
 

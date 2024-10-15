@@ -10,9 +10,6 @@ namespace AirlineTicketReservation.API.Models {
         public List<T> Results { get; set; } = new List<T>();
         public bool Status { get; set; } = true;
 
-        //[JsonProperty("error", NullValueHandling = NullValueHandling.Include)]
-        //public ErrorResponseModel Error { get; set; }
-
         public ResponseModel() {}
 
         public ResponseModel(IEnumerable<T> body) {

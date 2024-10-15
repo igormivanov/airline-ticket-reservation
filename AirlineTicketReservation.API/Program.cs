@@ -6,6 +6,10 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using AirlineTicketReservation.API.Dtos.Passenger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System;
 
 
 
@@ -17,11 +21,26 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var key = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("JwtSettings:secret"));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(options => {
+    options.TokenValidationParameters = new TokenValidationParameters {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateAudience = false,
+        ValidateIssuer = false
+
+    };
+});
+
+// Data base
 builder.Services.AddDbContext<AppDataContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-//builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<>)
+// Fluent Validation ID
 builder.Services.AddValidatorsFromAssemblyContaining<PassengerRequestDTOValidation>();
 
 
@@ -38,6 +57,7 @@ if (app.Environment.IsDevelopment()) {
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

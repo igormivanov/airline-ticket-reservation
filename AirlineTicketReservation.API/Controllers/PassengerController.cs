@@ -12,7 +12,6 @@ namespace AirlineTicketReservation.API.Controllers {
     public class PassengerController : Controller {
 
         private readonly IPassengerService _passengerService;
-        private readonly IValidator<PassengerRequestDTO> _PassengerRequestDTOValidator;
         public PassengerController(IPassengerService passengerService) { 
             _passengerService = passengerService;
         }

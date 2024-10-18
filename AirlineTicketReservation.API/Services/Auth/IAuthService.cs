@@ -4,7 +4,9 @@ using AirlineTicketReservation.Models;
 
 namespace AirlineTicketReservation.API.Services.Auth {
     public interface IAuthService {
-        Task<ResponseModel<RegisterPassengerResponseDTO>> RegisterPassenger(RegisterPassengerRequestDTO registerPassengerRequestDTO);
+        Task<ResponseModel<ResponseDTO>> RegisterPassenger(RegisterPassengerRequestDTO registerPassengerRequestDTO);
+        Task<ResponseModel<ResponseDTO>> LoginPassenger(LoginPassengerRequestDTO loginPassengerRequestDTO);
+
         
     }
 }

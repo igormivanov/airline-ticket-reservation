@@ -18,14 +18,14 @@ namespace AirlineTicketReservation.API.Controllers {
         }
 
         [HttpPost("passengers/register")]
-        public async Task<ActionResult<ResponseModel<RegisterPassengerResponseDTO>>> RegisterPassenger([FromBody] RegisterPassengerRequestDTO registerPassengerRequestDTO) {
+        public async Task<ActionResult<ResponseModel<ResponseDTO>>> RegisterPassenger([FromBody] RegisterPassengerRequestDTO registerPassengerRequestDTO) {
 
             var validator = new RegisterPassengerRequestDTOValidation();
             var result = validator.Validate(registerPassengerRequestDTO);
             var errors = result.Errors.Select(e => e.ErrorMessage);
 
             if (!result.IsValid) {
-                var badResponse = new ResponseModel<RegisterPassengerResponseDTO>();
+                var badResponse = new ResponseModel<ResponseDTO>();
                 badResponse.Status = false;
                 badResponse.Messages.AddRange(errors);
                 return BadRequest(badResponse);
@@ -38,5 +38,26 @@ namespace AirlineTicketReservation.API.Controllers {
             return BadRequest(response);
         }
 
+        [HttpPost("passengers/login")]
+        public async Task<ActionResult<ResponseModel<ResponseDTO>>> LoginPassenger(LoginPassengerRequestDTO loginPassengerRequestDTO) {
+            var validator = new LoginPassengerRequestDTOValidation();
+
+            var result = validator.Validate(loginPassengerRequestDTO);
+            var errors = result.Errors.Select(e => e.ErrorMessage);
+
+            if (!result.IsValid) {
+                var badResponse = new ResponseModel<ResponseDTO>();
+                badResponse.Status = false;
+                badResponse.Messages.AddRange(errors);
+                return BadRequest(badResponse);
+            }
+
+            var response = await _authService.LoginPassenger(loginPassengerRequestDTO);
+            if (response.Status) {
+                return Ok(response);
+            }
+
+            return BadRequest(response);
+        }
     }
 }

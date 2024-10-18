@@ -14,15 +14,56 @@ namespace AirlineTicketReservation.API.Services.Auth {
         private readonly IPassengerRepository _passengerRepository;
         private readonly IPasswordService _passwordService;
         private readonly ITokenService _tokenService;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IPassengerRepository passengerRepository, IPasswordService passwordService, ITokenService tokenService) {
+        public AuthService(IPassengerRepository passengerRepository, IPasswordService passwordService, ITokenService tokenService, ILogger<AuthService> logger) {
             _passengerRepository = passengerRepository;
             _passwordService = passwordService;
             _tokenService = tokenService;
+            _logger = logger;   
         }
 
-        public async Task<ResponseModel<RegisterPassengerResponseDTO>> RegisterPassenger(RegisterPassengerRequestDTO registerPassengerRequestDTO) {
-            var response = new ResponseModel<RegisterPassengerResponseDTO>();
+        public async Task<ResponseModel<ResponseDTO>> LoginPassenger(LoginPassengerRequestDTO loginPassengerRequestDTO) {
+            var response = new ResponseModel<ResponseDTO>();
+
+            try {
+                var passenger = await _passengerRepository.FindByEmail(loginPassengerRequestDTO.Email);
+
+                if (passenger == null) {
+                    throw new InvalidCredentialsException("Invalid credentials.");
+                }
+
+                var isValidPassword = await _passwordService.VerifyPassword(loginPassengerRequestDTO.Password, passenger);
+
+                if (!isValidPassword) {
+                    throw new InvalidCredentialsException("Invalid credentials.");
+                }
+
+                var token = _tokenService.GetAccessToken(passenger.FullName, passenger.Roles);
+                var expireAt = _tokenService.GetExpirationTimeFromToken(token);
+
+                var responseDTO = new ResponseDTO(passenger.FullName, token, expireAt, passenger.Roles);
+
+                response.Messages.Add("Login sucessfully");
+                response.Results.Add(responseDTO);
+
+                return response;
+
+            } catch (Exception ex) {
+                response.Status = false;
+
+                if (ex is InvalidCredentialsException) {
+                    response.Messages.Add(ex.Message);
+                    return response;
+                }
+
+                response.Messages.Add("An unexpected error occurred: " + ex.Message);
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<ResponseDTO>> RegisterPassenger(RegisterPassengerRequestDTO registerPassengerRequestDTO) {
+            var response = new ResponseModel<ResponseDTO>();
 
             try {
                 var passenger = await _passengerRepository.FindByEmail(registerPassengerRequestDTO.Email);
@@ -49,22 +90,21 @@ namespace AirlineTicketReservation.API.Services.Auth {
                 var token = _tokenService.GetAccessToken(newPassenger.FullName, newPassenger.Roles);
                 var tokenExpirationTime = _tokenService.GetExpirationTimeFromToken(token);
 
-                var responseDTO = new RegisterPassengerResponseDTO(newPassenger.FullName, token, tokenExpirationTime, newPassenger.Roles);
+                var responseDTO = new ResponseDTO(newPassenger.FullName, token, tokenExpirationTime, newPassenger.Roles);
 
                 response.Messages.Add("Passenger created successfully.");
                 response.Results.Add(responseDTO);
 
                 return response;
 
-            } catch (Exception ex) {
+            } catch (EmailAlreadyExistsException ex) {
                 response.Status = false;
-
-                if (ex is EmailAlreadyExistsException) {
-                    response.Messages.Add(ex.Message);
-                    return response;
-                }
-
-                response.Messages.Add("An unexpected error occurred: " + ex.Message);
+                response.Messages.Add(ex.Message);
+                return response;
+                
+            } catch (Exception ex) {
+                _logger.LogInformation("An unexpected error occurred: }" + ex.Message);
+                response.Messages.Add("An unexpected error occurred. Please try again later");
                 return response;
             }
         }

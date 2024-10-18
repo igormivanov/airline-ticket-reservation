@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AirlineTicketReservation.API.Enums;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,7 +13,7 @@ namespace AirlineTicketReservation.API.Services.Security {
             _config = config;
         }
 
-        public string GetAccessToken(string name, List<string> roles) {
+        public string GetAccessToken(string name, List<Role> roles) {
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -36,13 +37,13 @@ namespace AirlineTicketReservation.API.Services.Security {
             return tokenString;
         }
 
-        private ClaimsIdentity GetUserClaims(string name, List<string> roles) {
+        private ClaimsIdentity GetUserClaims(string name, List<Role> roles) {
             var claimsIdentity = new ClaimsIdentity();
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, name));
 
 
             foreach (var role in roles) {
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.ToString()));
             }
 
             return claimsIdentity;

@@ -1,8 +1,10 @@
 ﻿using AirlineTicketReservation.API.Dtos.Passenger;
 using AirlineTicketReservation.API.Exceptions;
+using AirlineTicketReservation.API.Mappers;
 using AirlineTicketReservation.API.Models;
 using AirlineTicketReservation.API.Repositories;
 using AirlineTicketReservation.Models;
+using System.Collections.Generic;
 
 namespace AirlineTicketReservation.API.Services {
     public class PassengerService : IPassengerService {
@@ -46,13 +48,15 @@ namespace AirlineTicketReservation.API.Services {
             }
         }
 
-        public async Task<ResponseModel<Passenger>> GetAllPassengers() {
-            var response = new ResponseModel<Passenger>();
+        public async Task<ResponseModel<PassengerDTO>> GetAllPassengers() {
+            var response = new ResponseModel<PassengerDTO>();
 
             try {
                 var passengers = await _passengerRepository.GetAll();
 
-                response.Results.AddRange(passengers);
+                List<PassengerDTO> passengersDTO = passengers.Select(p => p.toPassengerDTO()).ToList();
+                
+                response.Results.AddRange(passengersDTO);
 
                 if (passengers.Count == 0) {
                     response.Messages.Add("There are no registered passengers");

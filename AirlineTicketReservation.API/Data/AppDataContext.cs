@@ -1,4 +1,5 @@
-﻿using AirlineTicketReservation.Models;
+﻿using AirlineTicketReservation.API.Data.Configurations;
+using AirlineTicketReservation.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AirlineTicketReservation.Data {
@@ -8,5 +9,9 @@ namespace AirlineTicketReservation.Data {
 
         public DbSet<Passenger> Passengers { get; set; }
         public DbSet<LoyaltyProgram> LoyaltyProgram { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            modelBuilder.ApplyConfiguration(new PassengerEntityConfiguration());
+        }
     }
 }

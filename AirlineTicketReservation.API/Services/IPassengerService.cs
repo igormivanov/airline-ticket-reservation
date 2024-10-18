@@ -6,6 +6,6 @@ namespace AirlineTicketReservation.API.Services {
     public interface IPassengerService {
 
         Task<ResponseModel<Passenger>> CreatePassenger(PassengerRequestDTO passengerRequestDTO);
-        Task<ResponseModel<Passenger>> GetAllPassengers();
+        Task<ResponseModel<PassengerDTO>> GetAllPassengers();
     }
 }

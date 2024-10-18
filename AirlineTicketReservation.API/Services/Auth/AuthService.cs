@@ -31,9 +31,7 @@ namespace AirlineTicketReservation.API.Services.Auth {
                     throw new EmailAlreadyExistsException("Email already exists");
                 }
 
-                var roles = new List<string> {
-                    Roles.USER.ToString()
-                };
+                var userRoles = new List<Role>() { Role.USER };
 
                 var newPassenger = new Passenger() {
                     Id = Guid.NewGuid(),
@@ -41,7 +39,7 @@ namespace AirlineTicketReservation.API.Services.Auth {
                     FullName = registerPassengerRequestDTO.FullName,
                     Password = await _passwordService.EncryptPassword(registerPassengerRequestDTO.Password),
                     Phone = registerPassengerRequestDTO.Phone,
-                    Roles = roles,
+                    Roles = userRoles,
                     IdentityDocument = registerPassengerRequestDTO.IdentityDocument,
                 };
 

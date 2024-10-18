@@ -39,7 +39,7 @@ namespace AirlineTicketReservation.API.Controllers {
         }
 
         [HttpGet("passengers")]
-        public async Task<ActionResult<ResponseModel<Passenger>>> GetAll() {
+        public async Task<ActionResult<ResponseModel<PassengerDTO>>> GetAll() {
             var response = await _passengerService.GetAllPassengers();
             if (response.Status) {
                 return Ok(response);

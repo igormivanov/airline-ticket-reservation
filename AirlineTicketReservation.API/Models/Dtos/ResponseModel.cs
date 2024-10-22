@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace AirlineTicketReservation.API.Models {
+namespace AirlineTicketReservation.API.Models.Dtos {
     public class ResponseModel<T> {
 
         [JsonProperty("messages", NullValueHandling = NullValueHandling.Include)]
@@ -10,7 +10,7 @@ namespace AirlineTicketReservation.API.Models {
         public List<T> Results { get; set; } = new List<T>();
         public bool Status { get; set; } = true;
 
-        public ResponseModel() {}
+        public ResponseModel() { }
 
         public ResponseModel(IEnumerable<T> body) {
             Results.AddRange(body);
@@ -20,6 +20,6 @@ namespace AirlineTicketReservation.API.Models {
             Results.Add(body);
         }
 
-        
+
     }
 }

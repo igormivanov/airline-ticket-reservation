@@ -8,7 +8,7 @@ namespace AirlineTicketReservation.API.Services.Security {
             return Task.FromResult(isEqual);
         }
 
-        public Task<bool> VerifyPassword(string password, Passenger passenger) {
+        public Task<bool> VerifyPassword(string password, PassengerEntity passenger) {
             var validPassword = BCrypt.Net.BCrypt.Verify(password, passenger.Password);
             return Task.FromResult(validPassword);
         }

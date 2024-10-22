@@ -1,10 +1,11 @@
-﻿using AirlineTicketReservation.Models;
+﻿using AirlineTicketReservation.API.Models;
+using AirlineTicketReservation.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AirlineTicketReservation.API.Data.Configurations {
-    public class PassengerEntityConfiguration : IEntityTypeConfiguration<Passenger> {
-        public void Configure(EntityTypeBuilder<Passenger> builder) {
+    public class PassengerEntityConfiguration : IEntityTypeConfiguration<PassengerEntity> {
+        public void Configure(EntityTypeBuilder<PassengerEntity> builder) {
 
             builder.ToTable("tb_passengers");
 
@@ -29,7 +30,7 @@ namespace AirlineTicketReservation.API.Data.Configurations {
 
             builder.HasOne(p => p.LoyaltyProgram)
                 .WithOne(l => l.Passenger)
-                .HasForeignKey<LoyaltyProgram>(l => l.PassengerId)
+                .HasForeignKey<LoyaltyProgramEntity>(l => l.PassengerId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

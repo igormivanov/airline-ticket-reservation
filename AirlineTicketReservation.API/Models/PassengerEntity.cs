@@ -1,7 +1,8 @@
-﻿using AirlineTicketReservation.API.Enums;
+﻿using AirlineTicketReservation.API.Models;
+using AirlineTicketReservation.API.Models.Enums;
 
 namespace AirlineTicketReservation.Models {
-    public class Passenger {
+    public class PassengerEntity {
 
         public Guid Id {  get; init; }
         public string FullName { get; set; } = string.Empty;
@@ -9,7 +10,7 @@ namespace AirlineTicketReservation.Models {
         public string Password { get; set; } = string.Empty;
         public string Phone {  get; set; } = string.Empty;
         public string IdentityDocument {  get; set; } = string.Empty;
-        public LoyaltyProgram? LoyaltyProgram { get; set; }
+        public LoyaltyProgramEntity? LoyaltyProgram { get; set; }
         public List<Role> Roles { get; set; }
 
         

@@ -1,6 +1,5 @@
-﻿using AirlineTicketReservation.API.Dtos.Auth;
-using AirlineTicketReservation.API.Dtos.Passenger;
-using AirlineTicketReservation.API.Models;
+﻿using AirlineTicketReservation.API.Models.Dtos;
+using AirlineTicketReservation.API.Models.Dtos.Auth;
 using AirlineTicketReservation.API.Services;
 using AirlineTicketReservation.API.Services.Auth;
 using AirlineTicketReservation.Models;

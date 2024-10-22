@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 
-namespace AirlineTicketReservation.API.Dtos.Auth {
-    public class LoginPassengerRequestDTOValidation : AbstractValidator<LoginPassengerRequestDTO>{
+namespace AirlineTicketReservation.API.Models.Dtos.Auth {
+    public class LoginPassengerRequestDTOValidation : AbstractValidator<LoginPassengerRequestDTO> {
 
         public LoginPassengerRequestDTOValidation() {
             RuleFor(p => p.Email)

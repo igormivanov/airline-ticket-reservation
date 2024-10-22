@@ -1,5 +1,8 @@
-﻿namespace AirlineTicketReservation.API.Dtos.Auth {
-    public class RegisterPassengerRequestDTO {
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AirlineTicketReservation.API.Models.Dtos.Passenger {
+    public class PassengerRequestDTO {
+
         public string FullName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;

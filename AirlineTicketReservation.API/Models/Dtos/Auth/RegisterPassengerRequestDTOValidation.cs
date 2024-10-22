@@ -1,7 +1,6 @@
-﻿using AirlineTicketReservation.API.Dtos.Passenger;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace AirlineTicketReservation.API.Dtos.Auth {
+namespace AirlineTicketReservation.API.Models.Dtos.Auth {
     public class RegisterPassengerRequestDTOValidation : AbstractValidator<RegisterPassengerRequestDTO> {
 
         public RegisterPassengerRequestDTOValidation() {

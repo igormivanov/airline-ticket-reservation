@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.SqlServer.Server;
 
-namespace AirlineTicketReservation.API.Dtos.Passenger {
-    public class PassengerRequestDTOValidation : AbstractValidator<PassengerRequestDTO>{ 
+namespace AirlineTicketReservation.API.Models.Dtos.Passenger {
+    public class PassengerRequestDTOValidation : AbstractValidator<PassengerRequestDTO> {
 
         public PassengerRequestDTOValidation() {
             RuleFor(p => p.FullName)

@@ -1,6 +1,6 @@
-﻿using AirlineTicketReservation.API.Enums;
+﻿using AirlineTicketReservation.API.Models.Enums;
 
-namespace AirlineTicketReservation.API.Dtos.Auth {
+namespace AirlineTicketReservation.API.Models.Dtos.Auth {
     public class ResponseDTO {
         public string UserName { get; set; } = string.Empty;
         public string Token { get; set; } = string.Empty;

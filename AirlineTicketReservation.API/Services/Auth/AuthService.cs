@@ -1,7 +1,7 @@
-﻿using AirlineTicketReservation.API.Dtos.Auth;
-using AirlineTicketReservation.API.Enums;
-using AirlineTicketReservation.API.Exceptions;
-using AirlineTicketReservation.API.Models;
+﻿using AirlineTicketReservation.API.Exceptions;
+using AirlineTicketReservation.API.Models.Dtos;
+using AirlineTicketReservation.API.Models.Dtos.Auth;
+using AirlineTicketReservation.API.Models.Enums;
 using AirlineTicketReservation.API.Repositories;
 using AirlineTicketReservation.API.Services.Security;
 using AirlineTicketReservation.Models;
@@ -74,7 +74,7 @@ namespace AirlineTicketReservation.API.Services.Auth {
 
                 var userRoles = new List<Role>() { Role.USER };
 
-                var newPassenger = new Passenger() {
+                var newPassenger = new PassengerEntity() {
                     Id = Guid.NewGuid(),
                     Email = registerPassengerRequestDTO.Email,
                     FullName = registerPassengerRequestDTO.FullName,

@@ -1,4 +1,4 @@
-﻿using AirlineTicketReservation.API.Enums;
+﻿using AirlineTicketReservation.API.Models.Enums;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using AirlineTicketReservation.API.Enums;
+using AirlineTicketReservation.API.Models.Enums;
 using AirlineTicketReservation.Models;
 
 namespace AirlineTicketReservation.API.Services.Security {

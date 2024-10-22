@@ -11,17 +11,17 @@ namespace AirlineTicketReservation.API.Repositories {
             _context = context;
         }
 
-        public async Task Create(Passenger passenger) {
+        public async Task Create(PassengerEntity passenger) {
             _context.Passengers.Add(passenger);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Passenger> FindByEmail(string email) {
+        public async Task<PassengerEntity> FindByEmail(string email) {
             var passenger = await _context.Passengers.FirstOrDefaultAsync(passenger => passenger.Email == email);
             return passenger;
         }
 
-        public async Task<List<Passenger>> GetAll() {
+        public async Task<List<PassengerEntity>> GetAll() {
             var passangers = await _context.Passengers.ToListAsync();
             return passangers;
         }

@@ -1,7 +1,7 @@
-﻿using AirlineTicketReservation.API.Dtos.Passenger;
-using AirlineTicketReservation.API.Exceptions;
+﻿using AirlineTicketReservation.API.Exceptions;
 using AirlineTicketReservation.API.Mappers;
-using AirlineTicketReservation.API.Models;
+using AirlineTicketReservation.API.Models.Dtos;
+using AirlineTicketReservation.API.Models.Dtos.Passenger;
 using AirlineTicketReservation.API.Repositories;
 using AirlineTicketReservation.Models;
 using System.Collections.Generic;
@@ -14,8 +14,8 @@ namespace AirlineTicketReservation.API.Services {
         public PassengerService(IPassengerRepository passengerRepository) {
             _passengerRepository = passengerRepository;
         }
-        public async Task<ResponseModel<Passenger>> CreatePassenger(PassengerRequestDTO passengerRequestDTO) {
-            var response = new ResponseModel<Passenger>();
+        public async Task<ResponseModel<PassengerEntity>> CreatePassenger(PassengerRequestDTO passengerRequestDTO) {
+            var response = new ResponseModel<PassengerEntity>();
 
             try {
                 var passenger = await _passengerRepository.FindByEmail(passengerRequestDTO.Email);
@@ -24,7 +24,7 @@ namespace AirlineTicketReservation.API.Services {
                     throw new EmailAlreadyExistsException("Email already exists.");
                 }
 
-                var newPassenger = new Passenger() {
+                var newPassenger = new PassengerEntity() {
                     Id = Guid.NewGuid(),
                     Email = passengerRequestDTO.Email,
                     FullName = passengerRequestDTO.FullName,
@@ -41,7 +41,7 @@ namespace AirlineTicketReservation.API.Services {
 
                 return response;
 
-            } catch (Exception ex) {
+            } catch (EmailAlreadyExistsException ex) {
                 response.Status = false;
                 response.Messages.Add(ex.Message);
                 return response;

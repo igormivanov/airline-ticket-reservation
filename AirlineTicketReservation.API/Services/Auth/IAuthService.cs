@@ -1,5 +1,5 @@
-﻿using AirlineTicketReservation.API.Dtos.Auth;
-using AirlineTicketReservation.API.Models;
+﻿using AirlineTicketReservation.API.Models.Dtos;
+using AirlineTicketReservation.API.Models.Dtos.Auth;
 using AirlineTicketReservation.Models;
 
 namespace AirlineTicketReservation.API.Services.Auth {

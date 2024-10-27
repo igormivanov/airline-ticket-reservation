@@ -1,4 +1,6 @@
-﻿using AirlineTicketReservation.API.Models.Dtos;
+﻿using AirlineTicketReservation.API.Exceptions;
+using AirlineTicketReservation.API.Models.Dtos;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
 
@@ -24,17 +26,20 @@ namespace AirlineTicketReservation.API.Middlewares {
 
         private Task HandleExceptionAsync(HttpContext context, Exception exception) {
 
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.StatusCode = exception is HttpException httpEx ? httpEx.StatusCode : StatusCodes.Status500InternalServerError;
             context.Response.ContentType = "application/json";
 
-            // Cria o objeto de resposta com a mensagem de erro
-            var response = new ErrorModel(context.Response.StatusCode.ToString(), "Internal server error", exception.Message);
-
-            // Retorna a resposta em formato JSON
+            var problem = new ProblemDetails {
+                Status = (int)context.Response.StatusCode,
+                Title = "An error ocurrend",
+                Detail = exception.Message,
+                Instance = context.Request.Path,
+                
+            };
 
             var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
-            var json = JsonSerializer.Serialize(response, options);
+            var json = JsonSerializer.Serialize(problem, options);
             return context.Response.WriteAsync(json);
         }
     }

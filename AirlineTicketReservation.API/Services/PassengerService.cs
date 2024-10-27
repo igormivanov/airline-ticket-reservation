@@ -17,62 +17,47 @@ namespace AirlineTicketReservation.API.Services {
         public async Task<ResponseModel<PassengerEntity>> CreatePassenger(PassengerRequestDTO passengerRequestDTO) {
             var response = new ResponseModel<PassengerEntity>();
 
-            try {
-                var passenger = await _passengerRepository.FindByEmail(passengerRequestDTO.Email);
+            var passenger = await _passengerRepository.FindByEmail(passengerRequestDTO.Email);
 
-                if (passenger != null) {
-                    throw new EmailAlreadyExistsException("Email already exists.");
-                }
-
-                var newPassenger = new PassengerEntity() {
-                    Id = Guid.NewGuid(),
-                    Email = passengerRequestDTO.Email,
-                    FullName = passengerRequestDTO.FullName,
-                    IdentityDocument = passengerRequestDTO.IdentityDocument,
-                    Password = passengerRequestDTO.Password,
-                    Phone = passengerRequestDTO.Phone,
-                };
-
-                await _passengerRepository.Create(newPassenger);
-                var passengers = await _passengerRepository.GetAll();
-
-                response.Results.AddRange(passengers);
-                response.Messages.Add("Passenger created with sucess.");
-
-                return response;
-
-            } catch (EmailAlreadyExistsException ex) {
-                response.Status = false;
-                response.Messages.Add(ex.Message);
-                return response;
+            if (passenger != null) {
+                throw new EmailAlreadyExistsException("Email already exists.");
             }
+
+            var newPassenger = new PassengerEntity() {
+                Id = Guid.NewGuid(),
+                Email = passengerRequestDTO.Email,
+                FullName = passengerRequestDTO.FullName,
+                IdentityDocument = passengerRequestDTO.IdentityDocument,
+                Password = passengerRequestDTO.Password,
+                Phone = passengerRequestDTO.Phone,
+            };
+
+            await _passengerRepository.Create(newPassenger);
+            var passengers = await _passengerRepository.GetAll();
+
+            response.Results.AddRange(passengers);
+            response.Messages.Add("Passenger created with sucess.");
+
+            return response;
         }
 
         public async Task<ResponseModel<PassengerDTO>> GetAllPassengers() {
             var response = new ResponseModel<PassengerDTO>();
 
-            try {
-                var passengers = await _passengerRepository.GetAll();
+            var passengers = await _passengerRepository.GetAll();
 
-                List<PassengerDTO> passengersDTO = passengers.Select(p => p.toPassengerDTO()).ToList();
+            List<PassengerDTO> passengersDTO = passengers.Select(p => p.toPassengerDTO()).ToList();
                 
-                response.Results.AddRange(passengersDTO);
+            response.Results.AddRange(passengersDTO);
 
-                if (passengers.Count == 0) {
-                    response.Messages.Add("There are no registered passengers");
-                    return response;
-                }
-                response.Messages.Add("All passengers were found");
-
-
-                return response;
-            } catch (Exception ex) {
-
-                response.Status = false;
-                response.Messages.Add(ex.Message);
-
+            if (passengers.Count == 0) {
+                response.Messages.Add("There are no registered passengers");
                 return response;
             }
+            response.Messages.Add("All passengers were found");
+
+
+            return response;
         }
     }
 }

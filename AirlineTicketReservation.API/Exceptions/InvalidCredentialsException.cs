@@ -1,6 +1,6 @@
 ﻿namespace AirlineTicketReservation.API.Exceptions {
-    public class InvalidCredentialsException : Exception{
+    public class InvalidCredentialsException : HttpException {
 
-        public InvalidCredentialsException(string message) : base(message) { }
+        public InvalidCredentialsException(string message) : base(message, StatusCodes.Status409Conflict) { }
     }
 }

@@ -24,34 +24,10 @@ namespace AirlineTicketReservation.API.Controllers {
 
             var validator = new PassengerRequestDTOValidation();
             var result = validator.Validate(passengerRequestDTO);
-            //var errors = result.Errors;
 
             if (!result.IsValid) {
-                //var badResponse = new ResponseModel<PassengerEntity>();
-
                 var validationProblemDetails = result.ToValidationProblemDetails(_contextAccessor);
 
-                //var validationProblemDetails = new ValidationProblemDetails {
-                //    Status = StatusCodes.Status400BadRequest,
-                //    Title = "Validation failed",
-                //    Detail = "One or more validation errors occurred.",
-                //    Instance = HttpContext.TraceIdentifier,
-                //};
-
-                //var validationResults = new Dictionary<string, string[]>();
-
-                //foreach (var error in result.Errors) {
-                //    if (!validationResults.ContainsKey(error.PropertyName)) {
-                //        validationResults[error.PropertyName] = new string[] { error.ErrorMessage };
-                //    }
-                //    validationResults[error.PropertyName].Append(error.ErrorMessage);
-                //}
-
-                //validationProblemDetails.Errors = validationResults;
-
-                //badResponse.Status = false;
-                //badResponse.Messages.AddRange(errors);
-                //return BadRequest(badResponse);
                 return BadRequest(validationProblemDetails);
             }
 

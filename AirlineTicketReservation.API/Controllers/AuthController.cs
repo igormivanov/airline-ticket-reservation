@@ -1,4 +1,5 @@
-﻿using AirlineTicketReservation.API.Models.Dtos;
+﻿using AirlineTicketReservation.API.Extensions;
+using AirlineTicketReservation.API.Models.Dtos;
 using AirlineTicketReservation.API.Models.Dtos.Auth;
 using AirlineTicketReservation.API.Services;
 using AirlineTicketReservation.API.Services.Auth;
@@ -12,8 +13,10 @@ namespace AirlineTicketReservation.API.Controllers {
     public class AuthController : Controller {
 
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService) {
+        private readonly IHttpContextAccessor _contextAccessor;
+        public AuthController(IAuthService authService, IHttpContextAccessor contextAccessor) {
             _authService = authService;
+            _contextAccessor = contextAccessor;
         }
 
         [HttpPost("passengers/register")]
@@ -21,13 +24,11 @@ namespace AirlineTicketReservation.API.Controllers {
 
             var validator = new RegisterPassengerRequestDTOValidation();
             var result = validator.Validate(registerPassengerRequestDTO);
-            var errors = result.Errors.Select(e => e.ErrorMessage);
 
             if (!result.IsValid) {
-                var badResponse = new ResponseModel<ResponseDTO>();
-                badResponse.Status = false;
-                badResponse.Messages.AddRange(errors);
-                return BadRequest(badResponse);
+                var validationProblemDetails = result.ToValidationProblemDetails(_contextAccessor);
+
+                return BadRequest(validationProblemDetails);
             }
 
             var response = await _authService.RegisterPassenger(registerPassengerRequestDTO);
@@ -39,16 +40,14 @@ namespace AirlineTicketReservation.API.Controllers {
 
         [HttpPost("passengers/login")]
         public async Task<ActionResult<ResponseModel<ResponseDTO>>> LoginPassenger(LoginPassengerRequestDTO loginPassengerRequestDTO) {
+            
             var validator = new LoginPassengerRequestDTOValidation();
-
             var result = validator.Validate(loginPassengerRequestDTO);
-            var errors = result.Errors.Select(e => e.ErrorMessage);
 
             if (!result.IsValid) {
-                var badResponse = new ResponseModel<ResponseDTO>();
-                badResponse.Status = false;
-                badResponse.Messages.AddRange(errors);
-                return BadRequest(badResponse);
+                var validationProblemDetails = result.ToValidationProblemDetails(_contextAccessor);
+
+                return BadRequest(validationProblemDetails);
             }
 
             var response = await _authService.LoginPassenger(loginPassengerRequestDTO);
